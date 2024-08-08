@@ -1,4 +1,6 @@
+// Items.js
 import Component from '../core/Component.js';
+import Item from './Item.js';
 
 export default class Items extends Component {
   template() {
@@ -8,13 +10,7 @@ export default class Items extends Component {
         ${filteredItems
           .map(
             ({ contents, active, seq }) => `
-          <li data-seq="${seq}">
-            ${contents}
-            <button class="toggleBtn" style="color: ${active ? '#09F' : '#F09'}">
-              ${active ? '활성' : '비활성'}
-            </button>
-            <button class="deleteBtn">삭제</button>
-          </li>
+          <div data-component="item-${seq}"></div>
         `,
           )
           .join('')}
@@ -22,15 +18,17 @@ export default class Items extends Component {
     `;
   }
 
-  setEvent() {
-    const { deleteItem, toggleItem } = this.props;
-
-    this.addEvent('click', '.deleteBtn', ({ target }) => {
-      deleteItem(Number(target.closest('[data-seq]').dataset.seq));
-    });
-
-    this.addEvent('click', '.toggleBtn', ({ target }) => {
-      toggleItem(Number(target.closest('[data-seq]').dataset.seq));
+  mounted() {
+    const { filteredItems, deleteItem, toggleItem } = this.props;
+    filteredItems.forEach(({ contents, active, seq }) => {
+      const $item = this.$target.querySelector(`[data-component="item-${seq}"]`);
+      new Item($item, {
+        contents,
+        active,
+        seq,
+        deleteItem,
+        toggleItem,
+      });
     });
   }
 }
