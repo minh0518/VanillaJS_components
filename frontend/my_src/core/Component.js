@@ -9,8 +9,8 @@ export default class Component {
     this.setEvent();
     this.render();
   }
-  setup() {}
-  mounted() {}
+  setup() { }
+  mounted() { }
   template() {
     return '';
   }
@@ -18,14 +18,16 @@ export default class Component {
     this.$target.innerHTML = this.template();
     this.mounted(); // render 후에 mounted가 실행 된다.
   }
-  setEvent() {}
+  setEvent() { }
   setState(newState) {
     this.state = { ...this.state, ...newState };
     this.render();
   }
   addEvent(eventType, selector, callback) {
     this.$target.addEventListener(eventType, (event) => {
-      if (!event.target.closest(selector)) return false;
+      if (!event.target.closest(selector)) {
+        return false;
+      }
       callback(event);
     });
   }
